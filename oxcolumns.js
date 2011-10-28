@@ -286,10 +286,14 @@ oxColumns.prototype = {
 
 
   getColumnByField: function (module, n) {
-    console.log(this.idMapping[module]);
     for (var i in this.idMapping[module]) {
       if(this.idMapping[module][i] === n) {
         return i;
+      }
+    }
+    for (var j in this.idMapping.common) {
+      if(this.idMapping.common[j] === n) {
+        return j;
       }
     }
   return null;
@@ -302,9 +306,13 @@ oxColumns.prototype = {
       var item = nArr[j];
       for (var i in cols) {
         if (!this.idMapping[module][cols[i]]) {
-          throw module + ': ' + cols[i] + ' not found';
+          if(!this.idMapping.common[cols[i]]) {
+            throw module + ': ' + cols[i] + ' not found';
+          }
+          obj[this.idMapping.common[cols[i]]] = item[i];
+        } else {
+          obj[this.idMapping[module][cols[i]]] = item[i];
         }
-        obj[this.idMapping[module][cols[i]]] = item[i];
       }
       objs.push(obj);
     }
