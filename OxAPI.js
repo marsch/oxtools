@@ -3,7 +3,7 @@ var _ = require('underscore');
 var chain = require('slide').chain;
 var asyncMap = require('slide').asyncMap;
 var oxcolumns = require('./oxcolumns');
-
+var fs = require('fs');
 
 
 var OxAPI = function () {
@@ -214,17 +214,70 @@ OxAPI.prototype.getFolderFiles = function (folder_id, columns, callback) {
 
 OxAPI.prototype.downloadFile = function (filename, folder_id, item_id, callback) {
   var self = this;
-  self.api({
-    module: 'infostore',
-    raw: true,
-    /*path: '/' + filename,*/
-    params: {
-      action: 'document',
-      folder: folder_id,
-      id: item_id
-    }
-  }, callback);
+  var headers = {};
+  var url = self.endpoint + '/infostore?action=document&folder=' + folder_id +
+      '&id=' + item_id + '&session=' + self.session;
+  headers['Cookie'] = self.cookies.join('; ');
+
+  console.log(url);
+  console.log(headers);
+  var r = request({
+    url: url,
+    headers: headers
+  })
+  r.pipe(fs.createWriteStream(filename));
+  r.on('end', function () {
+    callback(null, true);
+  });
 };
+OxAPI.prototype.downloadDeltaFile = function (filename, folder_id, item_id, callback) {
+  var self = this;
+  var headers = {};
+  var url = self.endpoint + '/infostore?action=documentdelta&folder=' + folder_id +
+      '&id=' + item_id + '&session=' + self.session;
+  headers['Cookie'] = self.cookies.join('; ');
+
+
+  var fsstream = fs.createReadStream(filename);
+  fsstream.pipe(request.put({
+    url: url,
+    headers: headers
+  }, callback));
+
+};
+OxAPI.prototype.downloadSigFile = function (filename, folder_id, item_id, callback) {
+  var self = this;
+  var headers = {};
+  var url = self.endpoint + '/infostore?action=documentsig&folder=' + folder_id +
+      '&id=' + item_id + '&session=' + self.session;
+  headers['Cookie'] = self.cookies.join('; ');
+
+  console.log(url);
+  console.log(headers);
+  var r = request({
+    url: url,
+    headers: headers
+  })
+  r.pipe(fs.createWriteStream(filename + '.sig'));
+  r.on('end', function () {
+    return callback(null, true);
+  });
+};
+OxAPI.prototype.uploadPatchFile = function (filename, folder_id, item_id, callback) {
+  var self = this;
+  var headers = {};
+  var url = self.endpoint + '/infostore?action=documentpatch&folder=' + folder_id +
+      '&id=' + item_id + '&session=' + self.session;
+  headers['Cookie'] = self.cookies.join('; ');
+
+
+  var fsstream = fs.createReadStream(filename);
+  fsstream.pipe(request.put({
+    url: url,
+    headers: headers
+  }, callback));
+};
+
 OxAPI.prototype.multiple = function (cmds, callback) {
   var self = this;
   self.api({

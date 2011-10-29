@@ -31,13 +31,50 @@ b.login(oxuri, user, pass, function (err, config) {
     b.config.folder.infostore,
     'id,created_by,modified_by,creation_date,last_modified,folder_id,title,url,filename,file_size,version,current_version,number_of_versions',
     function (err, result) {
-    console.log(result.body);
 
-    b.downloadFile("Clean-TDD-Cheat-Sheet-V1.2.pdf", '9302', '4999', function (err, results) {
+      console.log(result.body.data);
+
+      b.uploadPatchFile('Ext_JS_3.0_Cookbook_[eBook]_30102009_112920.delta', '9302', '5009', function (err, results) {
+        if (err) {
+          throw err;
+        }
+        console.log(results);
+        b.logout(function (err, ok) {
+          if (err) {
+            throw err;
+          } 
+          console.log("successfullly logged out");
+        });
+      });
+      /*b.downloadSigFile('Ext_JS_3.0_Cookbook_[eBook]_30102009_112920.pdf', '9302', '5009', function (err, results) {
+        if (err) {
+          throw err;
+        }
+        b.logout(function (err, ok) {
+          if (err) {
+            throw err;
+          } 
+          console.log("successfullly logged out");
+        });
+      });*/
+
+
+
+      /*b.downloadDeltaFile('changed.sig', '9302', '5009', function (err, results) {
+        if (err) {
+          throw err;
+        }
+        b.logout(function (err, ok) {
+          if (err) {
+            throw err;
+          } 
+          console.log("successfullly logged out");
+        });
+      });*/
+    /*b.downloadFile("Ext_JS_3.0_Cookbook_[eBook]_30102009_112920.pdf", '9302', '5009', function (err, results) {
       if (err) {
         throw err;
       }
-      console.log(results);
       b.logout(function (err, ok) {
         if (err) {
           throw err;
@@ -45,7 +82,7 @@ b.login(oxuri, user, pass, function (err, config) {
         console.log("successfullly logged out");
       });
     });
-
+    */
 
 
 

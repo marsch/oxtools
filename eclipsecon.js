@@ -3,12 +3,13 @@ var _ = require('underscore');
 var OxAPI = require('./OxAPI');
 var asyncMap = require('slide').asyncMap;
 var chain = require('slide').chain;
+var utils = require('./utils');
 
 var oxuri = 'http://devel-apache.netline.de/ajax';
 var user = 'mario.scheliga@premium';
 var pass = 'secret';
 
-
+console.log(utils);
 
 var EclipseCon = function () {
   this.sessionURL = 'http://www.eclipsecon.org/europe2011/json/sessions';
@@ -73,13 +74,17 @@ EclipseCon.prototype.import = function (callback) {
     if (start > end) {
       throw 'ähh?';
     }
-    
+    var note = session.abstract;
+    note = utils.nl2br(note);
+    note = note.replace(/(\r\n|\n|\r)/gm,"");
+    note = utils.strip_tags(note);
+    console.log(JSON.stringify(note));
     cmd.push({
       module: 'calendar',
       action: 'new',
       data: {
-        title: session.title,
-        note: '',//session.abstract.replace(/\\r/,'\\\r').replace(/\\n/, '\\\n'),
+        title: session.title+"",
+        note: note,
         start_date: start,
         end_date: end,
         folder_id: self.ox.config.folder.calendar,
@@ -89,7 +94,7 @@ EclipseCon.prototype.import = function (callback) {
     });
   });
 
-  console.log(cmd);
+  //console.log(cmd);
   
   self.ox.multiple(cmd, function (err, data) {
     if (err) {
