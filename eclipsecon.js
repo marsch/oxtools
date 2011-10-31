@@ -14,9 +14,9 @@ console.log(utils);
 var EclipseCon = function () {
   this.sessionURL = 'http://www.eclipsecon.org/europe2011/json/sessions';
   this.speakerURL = 'http://www.eclipsecon.org/europe2011/json/speakers';
-  this.oxuri = 'http://devel-apache.netline.de/ajax';
-  this.oxuser = 'mario.scheliga@premium';
-  this.oxpass = 'secret';
+  this.oxuri = 'https://eclipsecon.ox.io/ajax';
+  this.oxuser = 'mario';
+  this.oxpass = 'secret#';
 };
 
 
@@ -87,7 +87,7 @@ EclipseCon.prototype.import = function (callback) {
         note: note,
         start_date: start,
         end_date: end,
-        folder_id: self.ox.config.folder.calendar,
+        folder_id: 485, //self.ox.config.folder.calendar,
         location: session.room,
         categories: session.category
       }

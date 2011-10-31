@@ -34,7 +34,7 @@ b.login(oxuri, user, pass, function (err, config) {
 
       console.log(result.body.data);
 
-      b.uploadPatchFile('Ext_JS_3.0_Cookbook_[eBook]_30102009_112920.delta', '9302', '5009', function (err, results) {
+      /*b.uploadPatchFile('Ext_JS_3.0_Cookbook_[eBook]_30102009_112920.delta', '9302', '5009', function (err, results) {
         if (err) {
           throw err;
         }
@@ -45,8 +45,8 @@ b.login(oxuri, user, pass, function (err, config) {
           } 
           console.log("successfullly logged out");
         });
-      });
-      /*b.downloadSigFile('Ext_JS_3.0_Cookbook_[eBook]_30102009_112920.pdf', '9302', '5009', function (err, results) {
+      });*/
+      b.downloadSigFile('Ext_JS_3.0_Cookbook_[eBook]_30102009_112920.pdf', '9302', '5009', function (err, results) {
         if (err) {
           throw err;
         }
@@ -56,7 +56,7 @@ b.login(oxuri, user, pass, function (err, config) {
           } 
           console.log("successfullly logged out");
         });
-      });*/
+      });
 
 
 
